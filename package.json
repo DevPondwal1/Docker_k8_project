@@ -1,0 +1,13 @@
+{
+  "name": "visitor-counter",
+  "version": "1.0.0",
+  "description": "Simple Node.js app that counts visitor hits using Redis",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "redis": "^4.6.14"
+  }
+}

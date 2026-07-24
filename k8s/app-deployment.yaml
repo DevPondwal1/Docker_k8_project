@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: visitor-counter-app
+  labels:
+    app: visitor-counter-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: visitor-counter-app
+  template:
+    metadata:
+      labels:
+        app: visitor-counter-app
+    spec:
+      containers:
+        - name: app
+          # Replace with your built/pushed image, e.g.
+          # your-dockerhub-user/visitor-counter-app:latest
+          image: visitor-counter-app:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+          env:
+            - name: REDIS_HOST
+              value: "redis-service"
+            - name: REDIS_PORT
+              value: "6379"
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "250m"
+              memory: "128Mi"

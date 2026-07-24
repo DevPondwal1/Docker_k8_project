@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    container_name: visitor-counter-app
+    ports:
+      - "3000:3000"
+    environment:
+      - REDIS_HOST=redis-service
+      - REDIS_PORT=6379
+    depends_on:
+      - redis-service
+    restart: unless-stopped
+
+  redis-service:
+    image: redis:7-alpine
+    container_name: visitor-counter-redis
+    # No ports published to the host — only the app needs to reach it,
+    # over the internal Compose network, by service name.
+    restart: unless-stopped
